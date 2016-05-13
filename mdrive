@@ -1,0 +1,6 @@
+#!/bin/bash
+KIDD=$$
+sudo cryptsetup luksOpen $1 $2 secureDrive$KIDD
+sudo mkdir /mnt/drive$KIDD
+sudo mount -t ext4 /dev/mapper/secureDrive$KIDD /mnt/drive$KIDD
+echo "Mounted to /mnt/drive$KIDD" >&2

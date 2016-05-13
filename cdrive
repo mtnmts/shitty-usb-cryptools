@@ -1,0 +1,26 @@
+#! /usr/local/bin/python
+
+import sys
+
+quit = False
+while not quit:
+	import os
+	import time
+	import re
+	try:
+		init = os.popen('ls /dev/sd*').read()
+
+		clean = lambda x: [l for l in x if l not in init.splitlines() and re.search('\d+$',l)]
+		os.popen('udrive &> /dev/null')
+		print("waiting for device")
+		while True:
+			time.sleep(1)
+			cur = os.popen('ls /dev/sd*').read()
+			if cur != init:
+				tgt = clean(cur.splitlines())[0].splitlines()[0]
+				print("mounting {tgt}".format(tgt=tgt))
+				os.popen('mdrive {tgt}'.format(tgt=tgt))
+				quit = True
+				sys.exit(0)
+	except:
+		continue

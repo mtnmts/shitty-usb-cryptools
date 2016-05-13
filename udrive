@@ -1,0 +1,21 @@
+#!/bin/bash
+
+sudo umount -R /mnt/drive*
+sleep 1
+sudo umount -f -R /mnt/drive*
+sleep 1
+sudo rmdir /mnt/drive*
+for f in /dev/mapper/secureDrive*
+do
+	sudo dmsetup remove -f $f
+done
+
+sudo rmdir /mnt/drive*
+
+if ls /mnt/ | grep -q drive
+then
+	echo "Undeleted device detected, calling recursively and attemping lazy-delete"
+	sudo umount -R -l /mnt/drive*
+	udrive
+fi
+
